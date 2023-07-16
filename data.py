@@ -17,7 +17,7 @@ class ChallengeDataset(Dataset):
         self._transform = tv.transforms.Compose([
             tv.transforms.ToPILImage(),
             tv.transforms.ToTensor(),
-            tv.transforms.Normalize((0.5,), (0.5,)),
+            tv.transforms.Normalize(train_mean, train_std),
         ])
 
     def __len__(self):
