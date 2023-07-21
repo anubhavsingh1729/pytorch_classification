@@ -28,25 +28,21 @@ class ResBlock(nn.Module):
         return out
 
 
-class Model(nn.Module):
-    def __int__(self):
+class ResNet(nn.Module):
+    def __init__(self):
         super().__init__()
         self.Conv2D = nn.Conv2d(3, 64, 7, 2)
-        self.BatchNorm = nn.BatchNorm1d()
+        self.BatchNorm = nn.BatchNorm2d(64)
         self.Relu = nn.ReLU()
         self.MaxPool = nn.MaxPool1d(3, 2)
-        self.ResBlock = self._make_resblock(64, 64, 1)
-        self.ResBlock = self._make_resblock(64, 128, 2)
-        self.ResBlock = self._make_resblock(128, 256, 2)
-        self.ResBlock = self._make_resblock(256, 512, 2)
+        self.ResBlock = ResBlock(64, 64, 1)
+        self.ResBlock = ResBlock(64, 128, 2)
+        self.ResBlock = ResBlock(128, 256, 2)
+        self.ResBlock = ResBlock(256, 512, 2)
         self.GlobalAvgPool = nn.AdaptiveAvgPool2d((1, 1))
         self.Flatten = nn.Flatten()
         self.FC = nn.Linear(512, 2)
         self.Sigmoid = nn.Sigmoid()
-
-    def _make_resblock(self, in_channels, out_channels, stride):
-        layers = [ResBlock(in_channels, out_channels, stride), ResBlock(out_channels, out_channels, stride=1)]
-        return nn.Sequential(*layers)
 
     def forward(self, x):
         out = self.conv1(x)
@@ -65,3 +61,4 @@ class Model(nn.Module):
         out = self.sigmoid(out)
 
         return out
+
